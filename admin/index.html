@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>鍗氬鍚庡彴绠＄悊</title>
+    <title>博客后台管理</title>
     <style>
         * {
             margin: 0;
@@ -211,81 +211,81 @@
     </style>
 </head>
 <body>
-    <!-- 鐧诲綍椤甸潰 -->
+    <!-- 登录页面 -->
     <div class="login-container" id="loginPage">
-        <h1>鍗氬鍚庡彴绠＄悊</h1>
+        <h1>博客后台管理</h1>
         <div class="form-group">
             <label>GitHub Token</label>
-            <input type="password" id="tokenInput" placeholder="杈撳叆浣犵殑 GitHub Personal Access Token">
+            <input type="password" id="tokenInput" placeholder="输入你的 GitHub Personal Access Token">
         </div>
-        <button class="btn" onclick="login()">鐧诲綍</button>
+        <button class="btn" onclick="login()">登录</button>
         <p class="error" id="loginError"></p>
         <p style="margin-top: 20px; font-size: 0.8rem; color: #999; text-align: center;">
-            闇€瑕?repo 鏉冮檺鐨?GitHub Token
+            需要 repo 权限的 GitHub Token
         </p>
     </div>
 
-    <!-- 绠＄悊椤甸潰 -->
+    <!-- 管理页面 -->
     <div class="admin-container" id="adminPage">
         <div class="header">
-            <h1>鍗氬鍚庡彴绠＄悊</h1>
-            <a href="#" class="logout" onclick="logout()">閫€鍑虹櫥褰?/a>
+            <h1>博客后台管理</h1>
+            <a href="#" class="logout" onclick="logout()">退出登录</a>
         </div>
         <div class="main">
             <div class="tabs">
-                <button class="tab active" onclick="showPanel('posts')">鏂囩珷鍒楄〃</button>
-                <button class="tab" onclick="showPanel('new')">鍐欐枃绔?/button>
+                <button class="tab active" onclick="showPanel('posts')">文章列表</button>
+                <button class="tab" onclick="showPanel('new')">写文章</button>
             </div>
 
-            <!-- 鏂囩珷鍒楄〃 -->
+            <!-- 文章列表 -->
             <div class="panel" id="postsPanel">
-                <h2 class="panel-title">鏂囩珷鍒楄〃</h2>
-                <div id="postsList" class="loading">鍔犺浇涓?..</div>
+                <h2 class="panel-title">文章列表</h2>
+                <div id="postsList" class="loading">加载中...</div>
             </div>
 
-            <!-- 鍐欐枃绔?-->
+            <!-- 写文章 -->
             <div class="panel editor" id="newPanel">
-                <h2 class="panel-title">鍐欐柊鏂囩珷</h2>
+                <h2 class="panel-title">写新文章</h2>
                 <div class="form-group">
-                    <label>鏍囬</label>
-                    <input type="text" id="postTitle" placeholder="杈撳叆鏂囩珷鏍囬">
+                    <label>标题</label>
+                    <input type="text" id="postTitle" placeholder="输入文章标题">
                 </div>
                 <div class="form-group">
-                    <label>鍐呭 (Markdown)</label>
-                    <textarea id="postContent" placeholder="杈撳叆鏂囩珷鍐呭..."></textarea>
+                    <label>内容 (Markdown)</label>
+                    <textarea id="postContent" placeholder="输入文章内容..."></textarea>
                 </div>
                 <div class="form-group">
-                    <label>鏍囩 (鐢ㄩ€楀彿鍒嗛殧)</label>
-                    <input type="text" id="postTags" placeholder="鏍囩1, 鏍囩2">
+                    <label>标签 (用逗号分隔)</label>
+                    <input type="text" id="postTags" placeholder="标签1, 标签2">
                 </div>
                 <div class="actions">
-                    <button class="btn" onclick="publishPost()">鍙戝竷鏂囩珷</button>
-                    <button class="btn btn-secondary" onclick="showPanel('posts')">鍙栨秷</button>
+                    <button class="btn" onclick="publishPost()">发布文章</button>
+                    <button class="btn btn-secondary" onclick="showPanel('posts')">取消</button>
                 </div>
                 <p class="success" id="publishSuccess"></p>
                 <p class="error" id="publishError"></p>
             </div>
 
-            <!-- 缂栬緫鏂囩珷 -->
+            <!-- 编辑文章 -->
             <div class="panel editor" id="editPanel">
-                <h2 class="panel-title">缂栬緫鏂囩珷</h2>
+                <h2 class="panel-title">编辑文章</h2>
                 <div class="form-group">
-                    <label>鏍囬</label>
-                    <input type="text" id="editTitle" placeholder="杈撳叆鏂囩珷鏍囬">
+                    <label>标题</label>
+                    <input type="text" id="editTitle" placeholder="输入文章标题">
                 </div>
                 <div class="form-group">
-                    <label>鍐呭 (Markdown)</label>
-                    <textarea id="editContent" placeholder="杈撳叆鏂囩珷鍐呭..."></textarea>
+                    <label>内容 (Markdown)</label>
+                    <textarea id="editContent" placeholder="输入文章内容..."></textarea>
                 </div>
                 <div class="form-group">
-                    <label>鏍囩 (鐢ㄩ€楀彿鍒嗛殧)</label>
-                    <input type="text" id="editTags" placeholder="鏍囩1, 鏍囩2">
+                    <label>标签 (用逗号分隔)</label>
+                    <input type="text" id="editTags" placeholder="标签1, 标签2">
                 </div>
                 <input type="hidden" id="editFilePath">
                 <input type="hidden" id="editFileSha">
                 <div class="actions">
-                    <button class="btn" onclick="updatePost()">淇濆瓨淇敼</button>
-                    <button class="btn btn-secondary" onclick="showPanel('posts')">鍙栨秷</button>
+                    <button class="btn" onclick="updatePost()">保存修改</button>
+                    <button class="btn btn-secondary" onclick="showPanel('posts')">取消</button>
                 </div>
                 <p class="success" id="updateSuccess"></p>
                 <p class="error" id="updateError"></p>
@@ -299,18 +299,19 @@
         const repo = 'kaynai.github.io';
         const postsPath = 'source/_posts';
 
-        // 鍒濆鍖?        if (token) {
+        // 初始化
+        if (token) {
             showAdmin();
         }
 
         function login() {
             const inputToken = document.getElementById('tokenInput').value.trim();
             if (!inputToken) {
-                document.getElementById('loginError').textContent = '璇疯緭鍏?GitHub Token';
+                document.getElementById('loginError').textContent = '请输入 GitHub Token';
                 return;
             }
             
-            // 楠岃瘉 token
+            // 验证 token
             fetch('https://api.github.com/user', {
                 headers: { 'Authorization': `token ${inputToken}` }
             })
@@ -320,11 +321,11 @@
                     localStorage.setItem('github_token', token);
                     showAdmin();
                 } else {
-                    document.getElementById('loginError').textContent = 'Token 鏃犳晥鎴栧凡杩囨湡';
+                    document.getElementById('loginError').textContent = 'Token 无效或已过期';
                 }
             })
             .catch(() => {
-                document.getElementById('loginError').textContent = '缃戠粶閿欒锛岃閲嶈瘯';
+                document.getElementById('loginError').textContent = '网络错误，请重试';
             });
         }
 
@@ -363,13 +364,13 @@
             .then(res => res.json())
             .then(data => {
                 if (data.message) {
-                    document.getElementById('postsList').innerHTML = '<p class="error">鍔犺浇澶辫触: ' + data.message + '</p>';
+                    document.getElementById('postsList').innerHTML = '<p class="error">加载失败: ' + data.message + '</p>';
                     return;
                 }
                 
                 const posts = data.filter(f => f.name.endsWith('.md'));
                 if (posts.length === 0) {
-                    document.getElementById('postsList').innerHTML = '<p style="color: #999;">鏆傛棤鏂囩珷</p>';
+                    document.getElementById('postsList').innerHTML = '<p style="color: #999;">暂无文章</p>';
                     return;
                 }
                 
@@ -381,7 +382,7 @@
                                 <a href="#" class="title" onclick="editPost('${post.path}', '${post.sha}')">${post.name.replace('.md', '')}</a>
                             </div>
                             <div class="actions">
-                                <a href="#" onclick="editPost('${post.path}', '${post.sha}')">缂栬緫</a>
+                                <a href="#" onclick="editPost('${post.path}', '${post.sha}')">编辑</a>
                             </div>
                         </li>
                     `;
@@ -390,7 +391,7 @@
                 document.getElementById('postsList').innerHTML = html;
             })
             .catch(() => {
-                document.getElementById('postsList').innerHTML = '<p class="error">缃戠粶閿欒</p>';
+                document.getElementById('postsList').innerHTML = '<p class="error">网络错误</p>';
             });
         }
 
@@ -400,7 +401,7 @@
             const tags = document.getElementById('postTags').value.trim();
             
             if (!title || !content) {
-                document.getElementById('publishError').textContent = '鏍囬鍜屽唴瀹逛笉鑳戒负绌?;
+                document.getElementById('publishError').textContent = '标题和内容不能为空';
                 return;
             }
 
@@ -421,7 +422,7 @@ ${tagsList.map(t => `  - ${t}`).join('\n')}
             const encodedContent = btoa(unescape(encodeURIComponent(fullContent)));
             
             document.getElementById('publishError').textContent = '';
-            document.getElementById('publishSuccess').textContent = '鍙戝竷涓?..';
+            document.getElementById('publishSuccess').textContent = '发布中...';
             
             fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${postsPath}/${slug}.md`, {
                 method: 'PUT',
@@ -437,7 +438,7 @@ ${tagsList.map(t => `  - ${t}`).join('\n')}
             .then(res => res.json())
             .then(data => {
                 if (data.content) {
-                    document.getElementById('publishSuccess').textContent = '鍙戝竷鎴愬姛锛?;
+                    document.getElementById('publishSuccess').textContent = '发布成功！';
                     document.getElementById('postTitle').value = '';
                     document.getElementById('postContent').value = '';
                     document.getElementById('postTags').value = '';
@@ -446,12 +447,12 @@ ${tagsList.map(t => `  - ${t}`).join('\n')}
                         loadPosts();
                     }, 1000);
                 } else {
-                    document.getElementById('publishError').textContent = '鍙戝竷澶辫触: ' + (data.message || '鏈煡閿欒');
+                    document.getElementById('publishError').textContent = '发布失败: ' + (data.message || '未知错误');
                     document.getElementById('publishSuccess').textContent = '';
                 }
             })
             .catch(() => {
-                document.getElementById('publishError').textContent = '缃戠粶閿欒';
+                document.getElementById('publishError').textContent = '网络错误';
                 document.getElementById('publishSuccess').textContent = '';
             });
         }
@@ -464,17 +465,17 @@ ${tagsList.map(t => `  - ${t}`).join('\n')}
             .then(data => {
                 const content = decodeURIComponent(escape(atob(data.content)));
                 
-                // 瑙ｆ瀽 front matter
+                // 解析 front matter
                 const match = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
                 if (match) {
                     const frontMatter = match[1];
                     const body = match[2];
                     
-                    // 瑙ｆ瀽鏍囬
+                    // 解析标题
                     const titleMatch = frontMatter.match(/title:\s*(.+)/);
                     const title = titleMatch ? titleMatch[1] : '';
                     
-                    // 瑙ｆ瀽鏍囩
+                    // 解析标签
                     const tagsMatch = frontMatter.match(/tags:\s*\n((?:\s+-\s+.+\n?)+)/);
                     let tags = '';
                     if (tagsMatch) {
@@ -500,7 +501,7 @@ ${tagsList.map(t => `  - ${t}`).join('\n')}
             const sha = document.getElementById('editFileSha').value;
             
             if (!title || !content) {
-                document.getElementById('updateError').textContent = '鏍囬鍜屽唴瀹逛笉鑳戒负绌?;
+                document.getElementById('updateError').textContent = '标题和内容不能为空';
                 return;
             }
 
@@ -520,7 +521,7 @@ ${tagsList.map(t => `  - ${t}`).join('\n')}
             const encodedContent = btoa(unescape(encodeURIComponent(fullContent)));
             
             document.getElementById('updateError').textContent = '';
-            document.getElementById('updateSuccess').textContent = '淇濆瓨涓?..';
+            document.getElementById('updateSuccess').textContent = '保存中...';
             
             fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
                 method: 'PUT',
@@ -537,19 +538,19 @@ ${tagsList.map(t => `  - ${t}`).join('\n')}
             .then(res => res.json())
             .then(data => {
                 if (data.content) {
-                    document.getElementById('updateSuccess').textContent = '淇濆瓨鎴愬姛锛?;
+                    document.getElementById('updateSuccess').textContent = '保存成功！';
                     document.getElementById('editFileSha').value = data.content.sha;
                     setTimeout(() => {
                         showPanel('posts');
                         loadPosts();
                     }, 1000);
                 } else {
-                    document.getElementById('updateError').textContent = '淇濆瓨澶辫触: ' + (data.message || '鏈煡閿欒');
+                    document.getElementById('updateError').textContent = '保存失败: ' + (data.message || '未知错误');
                     document.getElementById('updateSuccess').textContent = '';
                 }
             })
             .catch(() => {
-                document.getElementById('updateError').textContent = '缃戠粶閿欒';
+                document.getElementById('updateError').textContent = '网络错误';
                 document.getElementById('updateSuccess').textContent = '';
             });
         }
