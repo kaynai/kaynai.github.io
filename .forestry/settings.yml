@@ -1,0 +1,33 @@
+version: 3
+frontend:
+  name: Hexo
+  build:
+    command: npm run build
+    output_directory: public
+  install_dependencies: true
+backend:
+  name: github
+  repo: kaynai/kaynai.github.io
+  branch: main
+media_folder: source/images
+public_folder: /images
+collections:
+  - name: posts
+    label: 文章
+    folder: source/_posts
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: 标题, name: title, widget: string}
+      - {label: 发布日期, name: date, widget: datetime}
+      - {label: 标签, name: tags, widget: list, default: []}
+      - {label: 正文, name: body, widget: markdown}
+  - name: pages
+    label: 页面
+    files:
+      - name: about
+        label: 关于
+        file: source/about/index.md
+        fields:
+          - {label: 标题, name: title, widget: string}
+          - {label: 内容, name: body, widget: markdown}
