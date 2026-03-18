@@ -1,0 +1,8 @@
+title: 我是简事
+subtitle: 认导人员，关体报告
+author: kaynai
+language: zh-CN
+url: https://kww.ccwu.cc
+theme: simple
+new_post_name: :title.md
+per_page: 10
