@@ -16,15 +16,8 @@
             --border: #eee;
         }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        html {
-            scroll-behavior: smooth;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -33,7 +26,6 @@
             line-height: 1.7;
         }
         
-        /* 顶部导航 */
         .header {
             background: var(--card-bg);
             border-bottom: 1px solid var(--border);
@@ -59,23 +51,15 @@
             text-decoration: none;
         }
         
-        .nav {
-            display: flex;
-            gap: 25px;
-        }
-        
+        .nav { display: flex; gap: 25px; }
         .nav a {
             color: var(--text);
             text-decoration: none;
             font-size: 0.95rem;
             transition: color 0.3s;
         }
+        .nav a:hover { color: var(--primary); }
         
-        .nav a:hover {
-            color: var(--primary);
-        }
-        
-        /* 主容器 */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -86,15 +70,10 @@
         }
         
         @media (max-width: 900px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-            .sidebar {
-                display: none;
-            }
+            .container { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
         }
         
-        /* 文章列表 */
         .posts-section {
             display: flex;
             flex-direction: column;
@@ -109,12 +88,8 @@
             align-items: center;
             gap: 8px;
         }
+        .section-title i { color: var(--primary); }
         
-        .section-title i {
-            color: var(--primary);
-        }
-        
-        /* 文章卡片 */
         .post-card {
             background: var(--card-bg);
             border-radius: 12px;
@@ -128,9 +103,7 @@
             box-shadow: 0 8px 25px rgba(255,123,146,0.15);
         }
         
-        .post-card-inner {
-            display: flex;
-        }
+        .post-card-inner { display: flex; }
         
         .post-cover {
             width: 200px;
@@ -138,17 +111,9 @@
             background: linear-gradient(135deg, var(--primary-light), var(--primary));
             flex-shrink: 0;
         }
+        .post-cover img { width: 100%; height: 100%; object-fit: cover; }
         
-        .post-cover img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .post-content {
-            padding: 20px;
-            flex: 1;
-        }
+        .post-content { padding: 20px; flex: 1; }
         
         .post-category {
             display: inline-block;
@@ -160,20 +125,9 @@
             margin-bottom: 8px;
         }
         
-        .post-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        
-        .post-title a {
-            color: var(--text);
-            text-decoration: none;
-        }
-        
-        .post-title a:hover {
-            color: var(--primary);
-        }
+        .post-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; }
+        .post-title a { color: var(--text); text-decoration: none; }
+        .post-title a:hover { color: var(--primary); }
         
         .post-excerpt {
             font-size: 0.9rem;
@@ -191,20 +145,9 @@
             font-size: 0.8rem;
             color: var(--text-light);
         }
+        .post-meta span { display: flex; align-items: center; gap: 4px; }
         
-        .post-meta span {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        .post-tags {
-            display: flex;
-            gap: 6px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-        
+        .post-tags { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
         .post-tag {
             font-size: 0.75rem;
             color: var(--text-light);
@@ -213,18 +156,9 @@
             border-radius: 4px;
             text-decoration: none;
         }
+        .post-tag:hover { background: var(--primary-light); color: var(--primary); }
         
-        .post-tag:hover {
-            background: var(--primary-light);
-            color: var(--primary);
-        }
-        
-        /* 侧边栏 */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+        .sidebar { display: flex; flex-direction: column; gap: 20px; }
         
         .sidebar-card {
             background: var(--card-bg);
@@ -241,10 +175,7 @@
             border-bottom: 1px solid var(--border);
         }
         
-        /* 作者卡片 */
-        .author-card {
-            text-align: center;
-        }
+        .author-card { text-align: center; }
         
         .author-avatar {
             width: 80px;
@@ -259,44 +190,14 @@
             color: white;
         }
         
-        .author-name {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
+        .author-name { font-size: 1.1rem; font-weight: 600; margin-bottom: 5px; }
+        .author-bio { font-size: 0.85rem; color: var(--text-light); margin-bottom: 15px; }
+        .author-stats { display: flex; justify-content: center; gap: 20px; font-size: 0.85rem; }
+        .author-stats div { text-align: center; }
+        .author-stats .num { font-size: 1.2rem; font-weight: 600; color: var(--primary); }
         
-        .author-bio {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            margin-bottom: 15px;
-        }
-        
-        .author-stats {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            font-size: 0.85rem;
-        }
-        
-        .author-stats div {
-            text-align: center;
-        }
-        
-        .author-stats .num {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--primary);
-        }
-        
-        /* 分类列表 */
-        .category-list {
-            list-style: none;
-        }
-        
-        .category-list li {
-            margin-bottom: 8px;
-        }
-        
+        .category-list { list-style: none; }
+        .category-list li { margin-bottom: 8px; }
         .category-list a {
             display: flex;
             justify-content: space-between;
@@ -305,25 +206,10 @@
             padding: 5px 0;
             font-size: 0.9rem;
         }
+        .category-list a:hover { color: var(--primary); }
+        .category-count { background: #f5f5f5; padding: 0 8px; border-radius: 10px; font-size: 0.8rem; }
         
-        .category-list a:hover {
-            color: var(--primary);
-        }
-        
-        .category-count {
-            background: #f5f5f5;
-            padding: 0 8px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-        }
-        
-        /* 标签云 */
-        .tag-cloud {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        
+        .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
         .tag-cloud a {
             font-size: 0.8rem;
             color: var(--text-light);
@@ -333,26 +219,16 @@
             text-decoration: none;
             transition: all 0.3s;
         }
+        .tag-cloud a:hover { background: var(--primary); color: white; }
         
-        .tag-cloud a:hover {
-            background: var(--primary);
-            color: white;
-        }
-        
-        /* 页脚 */
         .footer {
             text-align: center;
             padding: 30px 20px;
             color: var(--text-light);
             font-size: 0.85rem;
         }
+        .footer a { color: var(--primary); text-decoration: none; }
         
-        .footer a {
-            color: var(--primary);
-            text-decoration: none;
-        }
-        
-        /* 管理按钮 */
         .admin-btn {
             position: fixed;
             bottom: 30px;
@@ -369,23 +245,14 @@
             box-shadow: 0 4px 15px rgba(255,123,146,0.4);
             transition: transform 0.3s;
         }
+        .admin-btn:hover { transform: scale(1.1); }
         
-        .admin-btn:hover {
-            transform: scale(1.1);
-        }
-        
-        /* 空状态 */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
             color: var(--text-light);
         }
-        
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            opacity: 0.5;
-        }
+        .empty-state i { font-size: 3rem; margin-bottom: 15px; opacity: 0.5; }
     </style>
 </head>
 <body>
@@ -427,16 +294,12 @@
             
             <div class="sidebar-card">
                 <h3 class="sidebar-title">分类</h3>
-                <ul class="category-list" id="categoryList">
-                    <!-- 分类将通过 JS 加载 -->
-                </ul>
+                <ul class="category-list" id="categoryList"></ul>
             </div>
             
             <div class="sidebar-card">
                 <h3 class="sidebar-title">标签</h3>
-                <div class="tag-cloud" id="tagCloud">
-                    <!-- 标签将通过 JS 加载 -->
-                </div>
+                <div class="tag-cloud" id="tagCloud"></div>
             </div>
         </aside>
     </main>
@@ -451,7 +314,6 @@
     </a>
     
     <script>
-        // 配置
         const CONFIG = {
             owner: 'kaynai',
             repo: 'kaynai.github.io',
@@ -459,7 +321,6 @@
             startDate: '2026-03-19'
         };
         
-        // 计算运行天数
         function calcRunDays() {
             const start = new Date(CONFIG.startDate);
             const now = new Date();
@@ -468,15 +329,16 @@
             document.getElementById('runTime').textContent = days;
         }
         
-        // 文章数据（从 posts.json 加载）
         let postsData = [];
         
-        // 加载文章列表
         async function loadPosts() {
             try {
-                const res = await fetch('/posts.json');
+                const res = await fetch('/posts.json?t=' + Date.now());
                 if (res.ok) {
-                    postsData = await res.json();
+                    const data = await res.json();
+                    // 支持两种格式: { posts: [...] } 或直接 [...]
+                    postsData = data.posts || data;
+                    console.log('加载文章:', postsData.length, '篇');
                     renderPosts();
                     renderCategories();
                     renderTags();
@@ -484,11 +346,11 @@
                     showEmpty();
                 }
             } catch (e) {
+                console.error('加载失败:', e);
                 showEmpty();
             }
         }
         
-        // 显示空状态
         function showEmpty() {
             document.getElementById('postsList').innerHTML = `
                 <div class="empty-state">
@@ -499,9 +361,8 @@
             `;
         }
         
-        // 渲染文章列表
         function renderPosts() {
-            if (postsData.length === 0) {
+            if (!postsData || postsData.length === 0) {
                 showEmpty();
                 return;
             }
@@ -520,7 +381,6 @@
                             <p class="post-excerpt">${post.excerpt || ''}</p>
                             <div class="post-meta">
                                 <span><i class="far fa-calendar"></i> ${post.date}</span>
-                                ${post.words ? `<span><i class="fas fa-file-word"></i> ${post.words} 字</span>` : ''}
                             </div>
                             ${post.tags && post.tags.length > 0 ? `
                                 <div class="post-tags">
@@ -535,7 +395,6 @@
             document.getElementById('postsList').innerHTML = html;
         }
         
-        // 渲染分类
         function renderCategories() {
             const categories = {};
             postsData.forEach(post => {
@@ -556,7 +415,6 @@
             document.getElementById('categoryList').innerHTML = html || '<li style="color: var(--text-light);">暂无分类</li>';
         }
         
-        // 渲染标签
         function renderTags() {
             const tags = {};
             postsData.forEach(post => {
@@ -574,7 +432,6 @@
             document.getElementById('tagCloud').innerHTML = html || '<span style="color: var(--text-light);">暂无标签</span>';
         }
         
-        // 初始化
         calcRunDays();
         loadPosts();
     </script>
