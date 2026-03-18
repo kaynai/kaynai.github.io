@@ -4,79 +4,150 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>博客后台管理</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
     <style>
+        :root {
+            --primary: #ff7b92;
+            --primary-dark: #e65c75;
+            --bg: #f5f5f5;
+            --card-bg: #ffffff;
+            --text: #4a4a4a;
+            --text-light: #888;
+            --border: #eee;
+            --success: #52c41a;
+            --error: #ff4d4f;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: #f5f5f5;
-            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
         }
-        .login-container {
-            max-width: 400px;
-            margin: 100px auto;
+        
+        /* 登录页 */
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);
+        }
+        
+        .login-box {
             background: white;
             padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(255,123,146,0.15);
+            width: 100%;
+            max-width: 400px;
         }
-        .login-container h1 {
+        
+        .login-title {
             text-align: center;
-            margin-bottom: 30px;
-            color: #333;
             font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: var(--primary);
         }
+        
         .form-group {
             margin-bottom: 20px;
         }
+        
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            color: #555;
             font-size: 0.9rem;
+            color: var(--text);
         }
-        .form-group input {
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
             font-size: 1rem;
+            transition: border-color 0.3s;
         }
-        .form-group input:focus {
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
             outline: none;
-            border-color: #0066cc;
+            border-color: var(--primary);
         }
+        
+        .form-group textarea {
+            min-height: 300px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
         .btn {
             width: 100%;
             padding: 12px;
-            background: #0066cc;
+            background: var(--primary);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 1rem;
             cursor: pointer;
             transition: background 0.3s;
         }
+        
         .btn:hover {
-            background: #0055aa;
+            background: var(--primary-dark);
         }
+        
         .btn:disabled {
             background: #ccc;
             cursor: not-allowed;
         }
-        .error {
-            color: #e74c3c;
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-sm {
+            padding: 8px 16px;
+            width: auto;
+            font-size: 0.9rem;
+        }
+        
+        .error-msg {
+            color: var(--error);
             font-size: 0.85rem;
             margin-top: 10px;
             text-align: center;
         }
-        .admin-container {
+        
+        .success-msg {
+            color: var(--success);
+            font-size: 0.85rem;
+            margin-top: 10px;
+            text-align: center;
+        }
+        
+        /* 管理页面 */
+        .admin-page {
             display: none;
         }
-        .header {
+        
+        .admin-header {
             background: white;
             padding: 15px 30px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
@@ -84,475 +155,689 @@
             justify-content: space-between;
             align-items: center;
         }
-        .header h1 {
+        
+        .admin-header h1 {
             font-size: 1.2rem;
-            color: #333;
+            font-weight: 600;
         }
-        .header .logout {
-            color: #666;
+        
+        .admin-header a {
+            color: var(--text-light);
             text-decoration: none;
             font-size: 0.9rem;
         }
-        .main {
-            max-width: 900px;
-            margin: 30px auto;
-            padding: 0 20px;
+        
+        .admin-header a:hover {
+            color: var(--primary);
         }
+        
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        /* 标签页 */
         .tabs {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
-        .tab {
-            padding: 10px 20px;
+        
+        .tab-btn {
+            padding: 10px 25px;
             background: white;
-            border: none;
-            border-radius: 5px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 0.9rem;
-            color: #666;
+            font-size: 0.95rem;
+            transition: all 0.3s;
         }
-        .tab.active {
-            background: #0066cc;
+        
+        .tab-btn.active {
+            background: var(--primary);
             color: white;
+            border-color: var(--primary);
         }
+        
+        .tab-btn:hover:not(.active) {
+            border-color: var(--primary);
+        }
+        
+        /* 面板 */
         .panel {
             background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            display: none;
         }
+        
+        .panel.active {
+            display: block;
+        }
+        
         .panel-title {
             font-size: 1.1rem;
+            font-weight: 600;
             margin-bottom: 20px;
-            color: #333;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
         }
+        
+        /* 文章列表 */
         .post-list {
             list-style: none;
         }
+        
         .post-item {
             padding: 15px 0;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+        
         .post-item:last-child {
             border-bottom: none;
         }
-        .post-item .title {
-            color: #333;
-            text-decoration: none;
+        
+        .post-info h4 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 5px;
         }
-        .post-item .date {
-            color: #999;
+        
+        .post-info p {
             font-size: 0.85rem;
+            color: var(--text-light);
         }
-        .post-item .actions {
+        
+        .post-actions {
             display: flex;
             gap: 10px;
         }
-        .post-item .actions a {
-            color: #0066cc;
+        
+        .post-actions a {
+            color: var(--primary);
             text-decoration: none;
             font-size: 0.85rem;
         }
-        .editor {
-            display: none;
+        
+        .post-actions a:hover {
+            text-decoration: underline;
         }
-        .editor.active {
-            display: block;
-        }
-        .editor .form-group {
-            margin-bottom: 20px;
-        }
-        .editor input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-        .editor textarea {
-            width: 100%;
-            min-height: 400px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 0.95rem;
-            font-family: "SFMono-Regular", Consolas, monospace;
-            resize: vertical;
-        }
-        .editor .actions {
+        
+        /* 编辑器 */
+        .editor-actions {
             display: flex;
             gap: 10px;
             margin-top: 20px;
         }
-        .editor .btn {
-            width: auto;
-            padding: 10px 30px;
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
         }
-        .btn-secondary {
-            background: #6c757d;
+        
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
         }
-        .btn-secondary:hover {
-            background: #5a6268;
+        
+        /* 预览 */
+        .preview-box {
+            background: #fafafa;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
         }
-        .success {
-            color: #27ae60;
-            font-size: 0.85rem;
-            margin-top: 10px;
+        
+        .preview-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
         }
+        
+        /* 加载状态 */
         .loading {
             text-align: center;
-            padding: 20px;
-            color: #666;
+            padding: 40px;
+            color: var(--text-light);
+        }
+        
+        .loading i {
+            font-size: 2rem;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 提示 */
+        .tip {
+            background: #fff7e6;
+            border: 1px solid #ffd591;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 0.85rem;
+            color: #d48806;
+            margin-bottom: 20px;
+        }
+        
+        .tip i {
+            margin-right: 8px;
         }
     </style>
 </head>
 <body>
-    <!-- 登录页面 -->
-    <div class="login-container" id="loginPage">
-        <h1>博客后台管理</h1>
-        <div class="form-group">
-            <label>GitHub Token</label>
-            <input type="password" id="tokenInput" placeholder="输入你的 GitHub Personal Access Token">
+    <!-- 登录页 -->
+    <div class="login-page" id="loginPage">
+        <div class="login-box">
+            <h2 class="login-title">🌸 博客后台管理</h2>
+            <div class="form-group">
+                <label>GitHub Token</label>
+                <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx">
+            </div>
+            <button class="btn" onclick="login()">登 录</button>
+            <p class="error-msg" id="loginError"></p>
+            <p style="margin-top: 20px; font-size: 0.8rem; color: var(--text-light); text-align: center;">
+                需要 repo 权限的 GitHub Personal Access Token
+            </p>
         </div>
-        <button class="btn" onclick="login()">登录</button>
-        <p class="error" id="loginError"></p>
-        <p style="margin-top: 20px; font-size: 0.8rem; color: #999; text-align: center;">
-            需要 repo 权限的 GitHub Token
-        </p>
     </div>
-
+    
     <!-- 管理页面 -->
-    <div class="admin-container" id="adminPage">
-        <div class="header">
-            <h1>博客后台管理</h1>
-            <a href="#" class="logout" onclick="logout()">退出登录</a>
-        </div>
-        <div class="main">
+    <div class="admin-page" id="adminPage">
+        <header class="admin-header">
+            <h1>🌸 博客后台管理</h1>
+            <div>
+                <a href="/" target="_blank">查看博客</a>
+                <span style="margin: 0 10px;">|</span>
+                <a href="#" onclick="logout()">退出登录</a>
+            </div>
+        </header>
+        
+        <div class="admin-container">
             <div class="tabs">
-                <button class="tab active" onclick="showPanel('posts')">文章列表</button>
-                <button class="tab" onclick="showPanel('new')">写文章</button>
+                <button class="tab-btn active" onclick="switchTab('posts')">文章列表</button>
+                <button class="tab-btn" onclick="switchTab('new')">写文章</button>
+                <button class="tab-btn" onclick="switchTab('settings')">设置</button>
             </div>
-
+            
             <!-- 文章列表 -->
-            <div class="panel" id="postsPanel">
-                <h2 class="panel-title">文章列表</h2>
-                <div id="postsList" class="loading">加载中...</div>
+            <div class="panel active" id="postsPanel">
+                <h3 class="panel-title">文章列表</h3>
+                <div id="postsList" class="loading">
+                    <i class="fas fa-spinner"></i> 加载中...
+                </div>
             </div>
-
+            
             <!-- 写文章 -->
-            <div class="panel editor" id="newPanel">
-                <h2 class="panel-title">写新文章</h2>
+            <div class="panel" id="newPanel">
+                <h3 class="panel-title">写新文章</h3>
+                <div class="tip">
+                    <i class="fas fa-info-circle"></i>
+                    文章使用 Markdown 格式，发布后会自动生成 HTML 页面
+                </div>
                 <div class="form-group">
-                    <label>标题</label>
+                    <label>文章标题</label>
                     <input type="text" id="postTitle" placeholder="输入文章标题">
                 </div>
-                <div class="form-group">
-                    <label>内容 (Markdown)</label>
-                    <textarea id="postContent" placeholder="输入文章内容..."></textarea>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>分类</label>
+                        <input type="text" id="postCategory" placeholder="如：技术札记">
+                    </div>
+                    <div class="form-group">
+                        <label>标签（逗号分隔）</label>
+                        <input type="text" id="postTags" placeholder="如：Python, 教程">
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label>标签 (用逗号分隔)</label>
-                    <input type="text" id="postTags" placeholder="标签1, 标签2">
+                    <label>文章内容（Markdown）</label>
+                    <textarea id="postContent" placeholder="在这里写文章内容..."></textarea>
                 </div>
-                <div class="actions">
-                    <button class="btn" onclick="publishPost()">发布文章</button>
-                    <button class="btn btn-secondary" onclick="showPanel('posts')">取消</button>
+                <div class="editor-actions">
+                    <button class="btn btn-sm" onclick="publishPost()">发布文章</button>
+                    <button class="btn btn-sm btn-secondary" onclick="previewPost()">预览</button>
                 </div>
-                <p class="success" id="publishSuccess"></p>
-                <p class="error" id="publishError"></p>
+                <p class="success-msg" id="publishSuccess"></p>
+                <p class="error-msg" id="publishError"></p>
+                <div class="preview-box" id="previewBox" style="display: none;">
+                    <h4 class="preview-title">预览</h4>
+                    <div id="previewContent"></div>
+                </div>
             </div>
-
+            
             <!-- 编辑文章 -->
-            <div class="panel editor" id="editPanel">
-                <h2 class="panel-title">编辑文章</h2>
+            <div class="panel" id="editPanel">
+                <h3 class="panel-title">编辑文章</h3>
                 <div class="form-group">
-                    <label>标题</label>
+                    <label>文章标题</label>
                     <input type="text" id="editTitle" placeholder="输入文章标题">
                 </div>
-                <div class="form-group">
-                    <label>内容 (Markdown)</label>
-                    <textarea id="editContent" placeholder="输入文章内容..."></textarea>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>分类</label>
+                        <input type="text" id="editCategory" placeholder="如：技术札记">
+                    </div>
+                    <div class="form-group">
+                        <label>标签（逗号分隔）</label>
+                        <input type="text" id="editTags" placeholder="如：Python, 教程">
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label>标签 (用逗号分隔)</label>
-                    <input type="text" id="editTags" placeholder="标签1, 标签2">
+                    <label>文章内容（Markdown）</label>
+                    <textarea id="editContent"></textarea>
                 </div>
-                <input type="hidden" id="editFilePath">
-                <input type="hidden" id="editFileSha">
-                <div class="actions">
-                    <button class="btn" onclick="updatePost()">保存修改</button>
-                    <button class="btn btn-secondary" onclick="showPanel('posts')">取消</button>
+                <input type="hidden" id="editSlug">
+                <input type="hidden" id="editSha">
+                <div class="editor-actions">
+                    <button class="btn btn-sm" onclick="updatePost()">保存修改</button>
+                    <button class="btn btn-sm btn-secondary" onclick="switchTab('posts')">取消</button>
                 </div>
-                <p class="success" id="updateSuccess"></p>
-                <p class="error" id="updateError"></p>
+                <p class="success-msg" id="updateSuccess"></p>
+                <p class="error-msg" id="updateError"></p>
+            </div>
+            
+            <!-- 设置 -->
+            <div class="panel" id="settingsPanel">
+                <h3 class="panel-title">博客设置</h3>
+                <div class="form-group">
+                    <label>博客标题</label>
+                    <input type="text" id="blogTitle" value="我的小窝">
+                </div>
+                <div class="form-group">
+                    <label>博客描述</label>
+                    <input type="text" id="blogDesc" value="记录生活与思考">
+                </div>
+                <div class="form-group">
+                    <label>作者名</label>
+                    <input type="text" id="authorName" value="博主">
+                </div>
+                <button class="btn btn-sm" onclick="saveSettings()">保存设置</button>
+                <p class="success-msg" id="settingsSuccess"></p>
             </div>
         </div>
     </div>
-
+    
+    <!-- 简单的 Markdown 解析器 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
-        let token = localStorage.getItem('github_token') || '';
-        const owner = 'kaynai';
-        const repo = 'kaynai.github.io';
-        const postsPath = 'source/_posts';
-
+        // 配置
+        const CONFIG = {
+            owner: 'kaynai',
+            repo: 'kaynai.github.io',
+            postsPath: 'posts',
+            postsJsonPath: 'posts.json'
+        };
+        
+        let token = localStorage.getItem('blog_token') || '';
+        let postsData = [];
+        
         // 初始化
         if (token) {
             showAdmin();
         }
-
-        function login() {
+        
+        // 登录
+        async function login() {
             const inputToken = document.getElementById('tokenInput').value.trim();
             if (!inputToken) {
                 document.getElementById('loginError').textContent = '请输入 GitHub Token';
                 return;
             }
             
-            // 验证 token
-            fetch('https://api.github.com/user', {
-                headers: { 'Authorization': `token ${inputToken}` }
-            })
-            .then(res => {
+            document.getElementById('loginError').textContent = '';
+            
+            try {
+                const res = await fetch('https://api.github.com/user', {
+                    headers: { Authorization: `token ${inputToken}` }
+                });
+                
                 if (res.ok) {
                     token = inputToken;
-                    localStorage.setItem('github_token', token);
+                    localStorage.setItem('blog_token', token);
                     showAdmin();
                 } else {
                     document.getElementById('loginError').textContent = 'Token 无效或已过期';
                 }
-            })
-            .catch(() => {
+            } catch (e) {
                 document.getElementById('loginError').textContent = '网络错误，请重试';
-            });
+            }
         }
-
+        
+        // 退出登录
         function logout() {
             token = '';
-            localStorage.removeItem('github_token');
-            document.getElementById('loginPage').style.display = 'block';
+            localStorage.removeItem('blog_token');
+            document.getElementById('loginPage').style.display = 'flex';
             document.getElementById('adminPage').style.display = 'none';
         }
-
+        
+        // 显示管理页面
         function showAdmin() {
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('adminPage').style.display = 'block';
             loadPosts();
         }
-
-        function showPanel(panel) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        
+        // 切换标签页
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
             
-            if (panel === 'posts') {
-                document.querySelector('.tab:first-child').classList.add('active');
-                document.getElementById('postsPanel').classList.add('active');
-            } else if (panel === 'new') {
-                document.querySelector('.tab:last-child').classList.add('active');
-                document.getElementById('newPanel').classList.add('active');
-            } else if (panel === 'edit') {
-                document.getElementById('editPanel').classList.add('active');
+            document.querySelector(`.tab-btn:nth-child(${tab === 'posts' ? 1 : tab === 'new' ? 2 : 3})`).classList.add('active');
+            document.getElementById(tab + 'Panel').classList.add('active');
+        }
+        
+        // 加载文章列表
+        async function loadPosts() {
+            try {
+                // 先尝试从 posts.json 加载
+                const res = await fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.postsJsonPath}`, {
+                    headers: { Authorization: `token ${token}` }
+                });
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    const content = JSON.parse(atob(data.content));
+                    postsData = content.posts || [];
+                    renderPostsList();
+                } else {
+                    // 如果没有 posts.json，尝试从 posts 目录加载
+                    await loadPostsFromDir();
+                }
+            } catch (e) {
+                document.getElementById('postsList').innerHTML = `
+                    <p style="color: var(--text-light); text-align: center; padding: 20px;">
+                        暂无文章，去写第一篇吧~
+                    </p>
+                `;
             }
         }
-
-        function loadPosts() {
-            fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${postsPath}`, {
-                headers: { 'Authorization': `token ${token}` }
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.message) {
-                    document.getElementById('postsList').innerHTML = '<p class="error">加载失败: ' + data.message + '</p>';
-                    return;
-                }
-                
-                const posts = data.filter(f => f.name.endsWith('.md'));
-                if (posts.length === 0) {
-                    document.getElementById('postsList').innerHTML = '<p style="color: #999;">暂无文章</p>';
-                    return;
-                }
-                
-                let html = '<ul class="post-list">';
-                posts.forEach(post => {
-                    html += `
-                        <li class="post-item">
-                            <div>
-                                <a href="#" class="title" onclick="editPost('${post.path}', '${post.sha}')">${post.name.replace('.md', '')}</a>
-                            </div>
-                            <div class="actions">
-                                <a href="#" onclick="editPost('${post.path}', '${post.sha}')">编辑</a>
-                            </div>
-                        </li>
-                    `;
+        
+        // 从目录加载文章
+        async function loadPostsFromDir() {
+            try {
+                const res = await fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.postsPath}`, {
+                    headers: { Authorization: `token ${token}` }
                 });
-                html += '</ul>';
-                document.getElementById('postsList').innerHTML = html;
-            })
-            .catch(() => {
-                document.getElementById('postsList').innerHTML = '<p class="error">网络错误</p>';
-            });
+                
+                if (res.ok) {
+                    const files = await res.json();
+                    const htmlFiles = files.filter(f => f.name.endsWith('.html'));
+                    
+                    postsData = htmlFiles.map(f => ({
+                        title: f.name.replace('.html', ''),
+                        slug: f.name.replace('.html', ''),
+                        date: '未知',
+                        sha: f.sha
+                    }));
+                    
+                    renderPostsList();
+                }
+            } catch (e) {
+                console.error(e);
+            }
         }
-
-        function publishPost() {
+        
+        // 渲染文章列表
+        function renderPostsList() {
+            if (postsData.length === 0) {
+                document.getElementById('postsList').innerHTML = `
+                    <p style="color: var(--text-light); text-align: center; padding: 20px;">
+                        暂无文章，去写第一篇吧~
+                    </p>
+                `;
+                return;
+            }
+            
+            const html = `<ul class="post-list">${
+                postsData.map(post => `
+                    <li class="post-item">
+                        <div class="post-info">
+                            <h4>${post.title}</h4>
+                            <p>${post.date} ${post.category ? '· ' + post.category : ''}</p>
+                        </div>
+                        <div class="post-actions">
+                            <a href="#" onclick="editPost('${post.slug}', '${post.sha || ''}')">编辑</a>
+                            <a href="/posts/${post.slug}.html" target="_blank">查看</a>
+                        </div>
+                    </li>
+                `).join('')
+            }</ul>`;
+            
+            document.getElementById('postsList').innerHTML = html;
+        }
+        
+        // 发布文章
+        async function publishPost() {
             const title = document.getElementById('postTitle').value.trim();
             const content = document.getElementById('postContent').value.trim();
-            const tags = document.getElementById('postTags').value.trim();
+            const category = document.getElementById('postCategory').value.trim();
+            const tagsStr = document.getElementById('postTags').value.trim();
             
             if (!title || !content) {
                 document.getElementById('publishError').textContent = '标题和内容不能为空';
                 return;
             }
-
+            
+            const tags = tagsStr ? tagsStr.split(',').map(t => t.trim()).filter(t => t) : [];
             const date = new Date().toISOString().split('T')[0];
             const slug = title.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]+/g, '-');
-            const tagsList = tags.split(',').map(t => t.trim()).filter(t => t);
             
-            const frontMatter = `---
-title: ${title}
-date: ${date}
-tags:
-${tagsList.map(t => `  - ${t}`).join('\n')}
----
-
-`;
-            
-            const fullContent = frontMatter + content;
-            const encodedContent = btoa(unescape(encodeURIComponent(fullContent)));
+            // 生成 HTML 内容
+            const htmlContent = generatePostHtml(title, content, date, category, tags);
+            const encodedContent = btoa(unescape(encodeURIComponent(htmlContent)));
             
             document.getElementById('publishError').textContent = '';
             document.getElementById('publishSuccess').textContent = '发布中...';
             
-            fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${postsPath}/${slug}.md`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    message: `Add post: ${title}`,
-                    content: encodedContent
-                })
-            })
-            .then(res => res.json())
-            .then(data => {
+            try {
+                // 上传文章 HTML
+                const res = await fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.postsPath}/${slug}.html`, {
+                    method: 'PUT',
+                    headers: {
+                        Authorization: `token ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `发布文章: ${title}`,
+                        content: encodedContent
+                    })
+                });
+                
+                const data = await res.json();
+                
                 if (data.content) {
+                    // 更新 posts.json
+                    await updatePostsJson({
+                        title,
+                        slug,
+                        date,
+                        category,
+                        tags,
+                        excerpt: content.substring(0, 150) + '...'
+                    });
+                    
                     document.getElementById('publishSuccess').textContent = '发布成功！';
                     document.getElementById('postTitle').value = '';
                     document.getElementById('postContent').value = '';
+                    document.getElementById('postCategory').value = '';
                     document.getElementById('postTags').value = '';
+                    
                     setTimeout(() => {
-                        showPanel('posts');
+                        switchTab('posts');
                         loadPosts();
                     }, 1000);
                 } else {
                     document.getElementById('publishError').textContent = '发布失败: ' + (data.message || '未知错误');
                     document.getElementById('publishSuccess').textContent = '';
                 }
-            })
-            .catch(() => {
-                document.getElementById('publishError').textContent = '网络错误';
+            } catch (e) {
+                document.getElementById('publishError').textContent = '网络错误: ' + e.message;
                 document.getElementById('publishSuccess').textContent = '';
-            });
-        }
-
-        function editPost(path, sha) {
-            fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
-                headers: { 'Authorization': `token ${token}` }
-            })
-            .then(res => res.json())
-            .then(data => {
-                const content = decodeURIComponent(escape(atob(data.content)));
-                
-                // 解析 front matter
-                const match = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
-                if (match) {
-                    const frontMatter = match[1];
-                    const body = match[2];
-                    
-                    // 解析标题
-                    const titleMatch = frontMatter.match(/title:\s*(.+)/);
-                    const title = titleMatch ? titleMatch[1] : '';
-                    
-                    // 解析标签
-                    const tagsMatch = frontMatter.match(/tags:\s*\n((?:\s+-\s+.+\n?)+)/);
-                    let tags = '';
-                    if (tagsMatch) {
-                        tags = tagsMatch[1].match(/-\s+(.+)/g).map(t => t.replace('- ', '')).join(', ');
-                    }
-                    
-                    document.getElementById('editTitle').value = title;
-                    document.getElementById('editContent').value = body;
-                    document.getElementById('editTags').value = tags;
-                    document.getElementById('editFilePath').value = path;
-                    document.getElementById('editFileSha').value = sha;
-                    
-                    showPanel('edit');
-                }
-            });
-        }
-
-        function updatePost() {
-            const title = document.getElementById('editTitle').value.trim();
-            const content = document.getElementById('editContent').value.trim();
-            const tags = document.getElementById('editTags').value.trim();
-            const path = document.getElementById('editFilePath').value;
-            const sha = document.getElementById('editFileSha').value;
-            
-            if (!title || !content) {
-                document.getElementById('updateError').textContent = '标题和内容不能为空';
-                return;
             }
-
-            const date = new Date().toISOString().split('T')[0];
-            const tagsList = tags.split(',').map(t => t.trim()).filter(t => t);
+        }
+        
+        // 生成文章 HTML
+        function generatePostHtml(title, content, date, category, tags) {
+            const htmlContent = marked.parse(content);
             
-            const frontMatter = `---
-title: ${title}
-date: ${date}
-tags:
-${tagsList.map(t => `  - ${t}`).join('\n')}
----
-
-`;
+            return `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+    <style>
+        :root { --primary: #ff7b92; --text: #4a4a4a; --text-light: #888; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+            color: var(--text);
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .post-header { margin-bottom: 30px; }
+        .post-category {
+            display: inline-block;
+            font-size: 0.75rem;
+            color: var(--primary);
+            background: #ffe4e9;
+            padding: 2px 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .post-title { font-size: 1.8rem; font-weight: 600; margin-bottom: 15px; }
+        .post-meta { color: var(--text-light); font-size: 0.9rem; }
+        .post-meta span { margin-right: 15px; }
+        .post-content { margin-top: 30px; }
+        .post-content h1, .post-content h2, .post-content h3 { margin: 1.5em 0 0.8em; }
+        .post-content p { margin-bottom: 1em; }
+        .post-content pre { background: #f5f5f5; padding: 15px; border-radius: 8px; overflow-x: auto; }
+        .post-content code { background: #f5f5f5; padding: 2px 6px; border-radius: 4px; }
+        .post-content img { max-width: 100%; border-radius: 8px; }
+        .post-tags { margin-top: 30px; display: flex; gap: 8px; flex-wrap: wrap; }
+        .post-tags a {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            background: #f5f5f5;
+            padding: 4px 12px;
+            border-radius: 15px;
+            text-decoration: none;
+        }
+        .back-link { display: inline-block; margin-top: 40px; color: var(--primary); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <article>
+        <header class="post-header">
+            ${category ? `<span class="post-category">${category}</span>` : ''}
+            <h1 class="post-title">${title}</h1>
+            <div class="post-meta">
+                <span><i class="far fa-calendar"></i> ${date}</span>
+            </div>
+        </header>
+        <div class="post-content">${htmlContent}</div>
+        ${tags.length > 0 ? `
+            <div class="post-tags">
+                ${tags.map(tag => `<a href="/?tag=${encodeURIComponent(tag)}"># ${tag}</a>`).join('')}
+            </div>
+        ` : ''}
+    </article>
+    <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> 返回首页</a>
+</body>
+</html>`;
+        }
+        
+        // 更新 posts.json
+        async function updatePostsJson(newPost) {
+            // 获取现有的 posts.json
+            let posts = [];
+            let sha = '';
             
-            const fullContent = frontMatter + content;
-            const encodedContent = btoa(unescape(encodeURIComponent(fullContent)));
+            try {
+                const res = await fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.postsJsonPath}`, {
+                    headers: { Authorization: `token ${token}` }
+                });
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    const content = JSON.parse(atob(data.content));
+                    posts = content.posts || [];
+                    sha = data.sha;
+                }
+            } catch (e) {
+                // 文件不存在，创建新的
+            }
             
-            document.getElementById('updateError').textContent = '';
-            document.getElementById('updateSuccess').textContent = '保存中...';
+            // 添加新文章到列表开头
+            posts.unshift(newPost);
             
-            fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+            const content = JSON.stringify({ posts }, null, 2);
+            const encodedContent = btoa(unescape(encodeURIComponent(content)));
+            
+            const body = {
+                message: '更新文章列表',
+                content: encodedContent
+            };
+            
+            if (sha) {
+                body.sha = sha;
+            }
+            
+            await fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.postsJsonPath}`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `token ${token}`,
+                    Authorization: `token ${token}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    message: `Update post: ${title}`,
-                    content: encodedContent,
-                    sha: sha
-                })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.content) {
-                    document.getElementById('updateSuccess').textContent = '保存成功！';
-                    document.getElementById('editFileSha').value = data.content.sha;
-                    setTimeout(() => {
-                        showPanel('posts');
-                        loadPosts();
-                    }, 1000);
-                } else {
-                    document.getElementById('updateError').textContent = '保存失败: ' + (data.message || '未知错误');
-                    document.getElementById('updateSuccess').textContent = '';
-                }
-            })
-            .catch(() => {
-                document.getElementById('updateError').textContent = '网络错误';
-                document.getElementById('updateSuccess').textContent = '';
+                body: JSON.stringify(body)
             });
+        }
+        
+        // 编辑文章
+        async function editPost(slug, sha) {
+            // 这里简化处理，实际需要从 GitHub 加载原始内容
+            document.getElementById('editSlug').value = slug;
+            document.getElementById('editSha').value = sha;
+            document.getElementById('editTitle').value = slug;
+            switchTab('edit');
+        }
+        
+        // 预览文章
+        function previewPost() {
+            const content = document.getElementById('postContent').value;
+            const previewBox = document.getElementById('previewBox');
+            const previewContent = document.getElementById('previewContent');
+            
+            if (content) {
+                previewContent.innerHTML = marked.parse(content);
+                previewBox.style.display = 'block';
+            }
+        }
+        
+        // 保存设置
+        function saveSettings() {
+            const settings = {
+                title: document.getElementById('blogTitle').value,
+                desc: document.getElementById('blogDesc').value,
+                author: document.getElementById('authorName').value
+            };
+            
+            localStorage.setItem('blog_settings', JSON.stringify(settings));
+            document.getElementById('settingsSuccess').textContent = '设置已保存到本地，需要手动更新首页';
         }
     </script>
 </body>
