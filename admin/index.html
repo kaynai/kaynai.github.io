@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鍗氬鍚庡彴绠＄悊</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        .login-container h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 0.9rem;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #0066cc;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #0055aa;
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .error {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .admin-container {
+            display: none;
+        }
+        .header {
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            font-size: 1.2rem;
+            color: #333;
+        }
+        .header .logout {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .main {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            background: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .tab.active {
+            background: #0066cc;
+            color: white;
+        }
+        .panel {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .panel-title {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .post-list {
+            list-style: none;
+        }
+        .post-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .post-item:last-child {
+            border-bottom: none;
+        }
+        .post-item .title {
+            color: #333;
+            text-decoration: none;
+        }
+        .post-item .date {
+            color: #999;
+            font-size: 0.85rem;
+        }
+        .post-item .actions {
+            display: flex;
+            gap: 10px;
+        }
+        .post-item .actions a {
+            color: #0066cc;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+        .editor {
+            display: none;
+        }
+        .editor.active {
+            display: block;
+        }
+        .editor .form-group {
+            margin-bottom: 20px;
+        }
+        .editor input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .editor textarea {
+            width: 100%;
+            min-height: 400px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.95rem;
+            font-family: "SFMono-Regular", Consolas, monospace;
+            resize: vertical;
+        }
+        .editor .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .editor .btn {
+            width: auto;
+            padding: 10px 30px;
+        }
+        .btn-secondary {
+            background: #6c757d;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        .success {
+            color: #27ae60;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <!-- 鐧诲綍椤甸潰 -->
+    <div class="login-container" id="loginPage">
+        <h1>鍗氬鍚庡彴绠＄悊</h1>
+        <div class="form-group">
+            <label>GitHub Token</label>
+            <input type="password" id="tokenInput" placeholder="杈撳叆浣犵殑 GitHub Personal Access Token">
+        </div>
+        <button class="btn" onclick="login()">鐧诲綍</button>
+        <p class="error" id="loginError"></p>
+        <p style="margin-top: 20px; font-size: 0.8rem; color: #999; text-align: center;">
+            闇€瑕?repo 鏉冮檺鐨?GitHub Token
+        </p>
+    </div>
+
+    <!-- 绠＄悊椤甸潰 -->
+    <div class="admin-container" id="adminPage">
+        <div class="header">
+            <h1>鍗氬鍚庡彴绠＄悊</h1>
+            <a href="#" class="logout" onclick="logout()">閫€鍑虹櫥褰?/a>
+        </div>
+        <div class="main">
+            <div class="tabs">
+                <button class="tab active" onclick="showPanel('posts')">鏂囩珷鍒楄〃</button>
+                <button class="tab" onclick="showPanel('new')">鍐欐枃绔?/button>
+            </div>
+
+            <!-- 鏂囩珷鍒楄〃 -->
+            <div class="panel" id="postsPanel">
+                <h2 class="panel-title">鏂囩珷鍒楄〃</h2>
+                <div id="postsList" class="loading">鍔犺浇涓?..</div>
+            </div>
+
+            <!-- 鍐欐枃绔?-->
+            <div class="panel editor" id="newPanel">
+                <h2 class="panel-title">鍐欐柊鏂囩珷</h2>
+                <div class="form-group">
+                    <label>鏍囬</label>
+                    <input type="text" id="postTitle" placeholder="杈撳叆鏂囩珷鏍囬">
+                </div>
+                <div class="form-group">
+                    <label>鍐呭 (Markdown)</label>
+                    <textarea id="postContent" placeholder="杈撳叆鏂囩珷鍐呭..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>鏍囩 (鐢ㄩ€楀彿鍒嗛殧)</label>
+                    <input type="text" id="postTags" placeholder="鏍囩1, 鏍囩2">
+                </div>
+                <div class="actions">
+                    <button class="btn" onclick="publishPost()">鍙戝竷鏂囩珷</button>
+                    <button class="btn btn-secondary" onclick="showPanel('posts')">鍙栨秷</button>
+                </div>
+                <p class="success" id="publishSuccess"></p>
+                <p class="error" id="publishError"></p>
+            </div>
+
+            <!-- 缂栬緫鏂囩珷 -->
+            <div class="panel editor" id="editPanel">
+                <h2 class="panel-title">缂栬緫鏂囩珷</h2>
+                <div class="form-group">
+                    <label>鏍囬</label>
+                    <input type="text" id="editTitle" placeholder="杈撳叆鏂囩珷鏍囬">
+                </div>
+                <div class="form-group">
+                    <label>鍐呭 (Markdown)</label>
+                    <textarea id="editContent" placeholder="杈撳叆鏂囩珷鍐呭..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>鏍囩 (鐢ㄩ€楀彿鍒嗛殧)</label>
+                    <input type="text" id="editTags" placeholder="鏍囩1, 鏍囩2">
+                </div>
+                <input type="hidden" id="editFilePath">
+                <input type="hidden" id="editFileSha">
+                <div class="actions">
+                    <button class="btn" onclick="updatePost()">淇濆瓨淇敼</button>
+                    <button class="btn btn-secondary" onclick="showPanel('posts')">鍙栨秷</button>
+                </div>
+                <p class="success" id="updateSuccess"></p>
+                <p class="error" id="updateError"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let token = localStorage.getItem('github_token') || '';
+        const owner = 'kaynai';
+        const repo = 'kaynai.github.io';
+        const postsPath = 'source/_posts';
+
+        // 鍒濆鍖?        if (token) {
+            showAdmin();
+        }
+
+        function login() {
+            const inputToken = document.getElementById('tokenInput').value.trim();
+            if (!inputToken) {
+                document.getElementById('loginError').textContent = '璇疯緭鍏?GitHub Token';
+                return;
+            }
+            
+            // 楠岃瘉 token
+            fetch('https://api.github.com/user', {
+                headers: { 'Authorization': `token ${inputToken}` }
+            })
+            .then(res => {
+                if (res.ok) {
+                    token = inputToken;
+                    localStorage.setItem('github_token', token);
+                    showAdmin();
+                } else {
+                    document.getElementById('loginError').textContent = 'Token 鏃犳晥鎴栧凡杩囨湡';
+                }
+            })
+            .catch(() => {
+                document.getElementById('loginError').textContent = '缃戠粶閿欒锛岃閲嶈瘯';
+            });
+        }
+
+        function logout() {
+            token = '';
+            localStorage.removeItem('github_token');
+            document.getElementById('loginPage').style.display = 'block';
+            document.getElementById('adminPage').style.display = 'none';
+        }
+
+        function showAdmin() {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('adminPage').style.display = 'block';
+            loadPosts();
+        }
+
+        function showPanel(panel) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            
+            if (panel === 'posts') {
+                document.querySelector('.tab:first-child').classList.add('active');
+                document.getElementById('postsPanel').classList.add('active');
+            } else if (panel === 'new') {
+                document.querySelector('.tab:last-child').classList.add('active');
+                document.getElementById('newPanel').classList.add('active');
+            } else if (panel === 'edit') {
+                document.getElementById('editPanel').classList.add('active');
+            }
+        }
+
+        function loadPosts() {
+            fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${postsPath}`, {
+                headers: { 'Authorization': `token ${token}` }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.message) {
+                    document.getElementById('postsList').innerHTML = '<p class="error">鍔犺浇澶辫触: ' + data.message + '</p>';
+                    return;
+                }
+                
+                const posts = data.filter(f => f.name.endsWith('.md'));
+                if (posts.length === 0) {
+                    document.getElementById('postsList').innerHTML = '<p style="color: #999;">鏆傛棤鏂囩珷</p>';
+                    return;
+                }
+                
+                let html = '<ul class="post-list">';
+                posts.forEach(post => {
+                    html += `
+                        <li class="post-item">
+                            <div>
+                                <a href="#" class="title" onclick="editPost('${post.path}', '${post.sha}')">${post.name.replace('.md', '')}</a>
+                            </div>
+                            <div class="actions">
+                                <a href="#" onclick="editPost('${post.path}', '${post.sha}')">缂栬緫</a>
+                            </div>
+                        </li>
+                    `;
+                });
+                html += '</ul>';
+                document.getElementById('postsList').innerHTML = html;
+            })
+            .catch(() => {
+                document.getElementById('postsList').innerHTML = '<p class="error">缃戠粶閿欒</p>';
+            });
+        }
+
+        function publishPost() {
+            const title = document.getElementById('postTitle').value.trim();
+            const content = document.getElementById('postContent').value.trim();
+            const tags = document.getElementById('postTags').value.trim();
+            
+            if (!title || !content) {
+                document.getElementById('publishError').textContent = '鏍囬鍜屽唴瀹逛笉鑳戒负绌?;
+                return;
+            }
+
+            const date = new Date().toISOString().split('T')[0];
+            const slug = title.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]+/g, '-');
+            const tagsList = tags.split(',').map(t => t.trim()).filter(t => t);
+            
+            const frontMatter = `---
+title: ${title}
+date: ${date}
+tags:
+${tagsList.map(t => `  - ${t}`).join('\n')}
+---
+
+`;
+            
+            const fullContent = frontMatter + content;
+            const encodedContent = btoa(unescape(encodeURIComponent(fullContent)));
+            
+            document.getElementById('publishError').textContent = '';
+            document.getElementById('publishSuccess').textContent = '鍙戝竷涓?..';
+            
+            fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${postsPath}/${slug}.md`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: `Add post: ${title}`,
+                    content: encodedContent
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.content) {
+                    document.getElementById('publishSuccess').textContent = '鍙戝竷鎴愬姛锛?;
+                    document.getElementById('postTitle').value = '';
+                    document.getElementById('postContent').value = '';
+                    document.getElementById('postTags').value = '';
+                    setTimeout(() => {
+                        showPanel('posts');
+                        loadPosts();
+                    }, 1000);
+                } else {
+                    document.getElementById('publishError').textContent = '鍙戝竷澶辫触: ' + (data.message || '鏈煡閿欒');
+                    document.getElementById('publishSuccess').textContent = '';
+                }
+            })
+            .catch(() => {
+                document.getElementById('publishError').textContent = '缃戠粶閿欒';
+                document.getElementById('publishSuccess').textContent = '';
+            });
+        }
+
+        function editPost(path, sha) {
+            fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                headers: { 'Authorization': `token ${token}` }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const content = decodeURIComponent(escape(atob(data.content)));
+                
+                // 瑙ｆ瀽 front matter
+                const match = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+                if (match) {
+                    const frontMatter = match[1];
+                    const body = match[2];
+                    
+                    // 瑙ｆ瀽鏍囬
+                    const titleMatch = frontMatter.match(/title:\s*(.+)/);
+                    const title = titleMatch ? titleMatch[1] : '';
+                    
+                    // 瑙ｆ瀽鏍囩
+                    const tagsMatch = frontMatter.match(/tags:\s*\n((?:\s+-\s+.+\n?)+)/);
+                    let tags = '';
+                    if (tagsMatch) {
+                        tags = tagsMatch[1].match(/-\s+(.+)/g).map(t => t.replace('- ', '')).join(', ');
+                    }
+                    
+                    document.getElementById('editTitle').value = title;
+                    document.getElementById('editContent').value = body;
+                    document.getElementById('editTags').value = tags;
+                    document.getElementById('editFilePath').value = path;
+                    document.getElementById('editFileSha').value = sha;
+                    
+                    showPanel('edit');
+                }
+            });
+        }
+
+        function updatePost() {
+            const title = document.getElementById('editTitle').value.trim();
+            const content = document.getElementById('editContent').value.trim();
+            const tags = document.getElementById('editTags').value.trim();
+            const path = document.getElementById('editFilePath').value;
+            const sha = document.getElementById('editFileSha').value;
+            
+            if (!title || !content) {
+                document.getElementById('updateError').textContent = '鏍囬鍜屽唴瀹逛笉鑳戒负绌?;
+                return;
+            }
+
+            const date = new Date().toISOString().split('T')[0];
+            const tagsList = tags.split(',').map(t => t.trim()).filter(t => t);
+            
+            const frontMatter = `---
+title: ${title}
+date: ${date}
+tags:
+${tagsList.map(t => `  - ${t}`).join('\n')}
+---
+
+`;
+            
+            const fullContent = frontMatter + content;
+            const encodedContent = btoa(unescape(encodeURIComponent(fullContent)));
+            
+            document.getElementById('updateError').textContent = '';
+            document.getElementById('updateSuccess').textContent = '淇濆瓨涓?..';
+            
+            fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: `Update post: ${title}`,
+                    content: encodedContent,
+                    sha: sha
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.content) {
+                    document.getElementById('updateSuccess').textContent = '淇濆瓨鎴愬姛锛?;
+                    document.getElementById('editFileSha').value = data.content.sha;
+                    setTimeout(() => {
+                        showPanel('posts');
+                        loadPosts();
+                    }, 1000);
+                } else {
+                    document.getElementById('updateError').textContent = '淇濆瓨澶辫触: ' + (data.message || '鏈煡閿欒');
+                    document.getElementById('updateSuccess').textContent = '';
+                }
+            })
+            .catch(() => {
+                document.getElementById('updateError').textContent = '缃戠粶閿欒';
+                document.getElementById('updateSuccess').textContent = '';
+            });
+        }
+    </script>
+</body>
+</html>
