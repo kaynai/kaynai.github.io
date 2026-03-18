@@ -321,7 +321,6 @@
     </div>
 
     <script>
-        // 调试日志
         function log(msg, type = 'log') {
             const panel = document.getElementById('debugPanel');
             const div = document.createElement('div');
@@ -332,33 +331,18 @@
             console.log(msg);
         }
 
-        // UTF-8 Base64 编码/解码
-        function utf8ToBase64(str) {
-            try {
-                const bytes = new TextEncoder().encode(str);
-                let binary = '';
-                for (let i = 0; i < bytes.length; i++) {
-                    binary += String.fromCharCode(bytes[i]);
-                }
-                return btoa(binary);
-            } catch (e) {
-                log('Base64编码错误: ' + e.message, 'error');
-                throw e;
-            }
+        // Base64 编码（支持中文）
+        function base64Encode(str) {
+            return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+                return String.fromCharCode('0x' + p1);
+            }));
         }
         
-        function base64ToUtf8(base64) {
-            try {
-                const binary = atob(base64);
-                const bytes = new Uint8Array(binary.length);
-                for (let i = 0; i < binary.length; i++) {
-                    bytes[i] = binary.charCodeAt(i);
-                }
-                return new TextDecoder().decode(bytes);
-            } catch (e) {
-                log('Base64解码错误: ' + e.message, 'error');
-                throw e;
-            }
+        // Base64 解码（支持中文）
+        function base64Decode(base64) {
+            return decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
         }
 
         const CONFIG = {
@@ -448,7 +432,7 @@
                 
                 if (res.ok) {
                     const data = await res.json();
-                    const content = base64ToUtf8(data.content);
+                    const content = base64Decode(data.content);
                     log('posts.json 解析成功');
                     const json = JSON.parse(content);
                     postsData = json.posts || [];
@@ -526,7 +510,7 @@
             log('生成 slug: ' + slug);
             
             const htmlContent = generatePostHtml(title, content, date, category, tags);
-            const encodedContent = utf8ToBase64(htmlContent);
+            const encodedContent = base64Encode(htmlContent);
             
             log('HTML 内容长度: ' + htmlContent.length);
             
@@ -548,7 +532,7 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        message: `发布文章: ${title}`,
+                        message: `Add post: ${slug}`,
                         content: encodedContent
                     })
                 });
@@ -565,7 +549,7 @@
                         date,
                         category,
                         tags,
-                        excerpt: content.substring(0, 100)
+                        excerpt: content.substring(0, 100).replace(/\n/g, ' ')
                     });
                     
                     document.getElementById('publishSuccess').textContent = '✅ 发布成功！';
@@ -661,7 +645,7 @@
                 
                 if (res.ok) {
                     const data = await res.json();
-                    const content = base64ToUtf8(data.content);
+                    const content = base64Decode(data.content);
                     const json = JSON.parse(content);
                     posts = json.posts || [];
                     sha = data.sha;
@@ -674,10 +658,10 @@
             posts.unshift(newPost);
             
             const jsonContent = JSON.stringify({ posts }, null, 2);
-            const encodedContent = utf8ToBase64(jsonContent);
+            const encodedContent = base64Encode(jsonContent);
             
             const body = {
-                message: '更新文章列表',
+                message: 'Update posts.json',
                 content: encodedContent
             };
             
