@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="<%= config.language || 'zh-CN' %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><% if (page.title) { %><%= page.title %> - <% } %><%= config.title %></title>
+  <%- css('css/style') %>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><a href="/"><%= config.title %></a></h1>
+      <p><%= config.subtitle %></p>
+    </header>
+    <nav>
+      <a href="/">棣栭〉</a>
+      <a href="/about/">鍏充簬</a>
+      <a href="https://github.com/kaynai" target="_blank">GitHub</a>
+    </nav>
+    <main>
+      <%- body %>
+    </main>
+    <footer>
+      <p>&copy; <%= new Date().getFullYear() %> <%= config.title %>. Powered by Hexo.</p>
+    </footer>
+  </div>
+</body>
+</html>
