@@ -1,30 +1,12 @@
 {
   "posts": [
     {
-      "title": "测试文章",
-      "slug": "post-1773874623061",
-      "date": "2026-03-18",
-      "category": "测试",
-      "tags": [],
-      "excerpt": "这是一篇测试文章。\n\n## 标题一\n\n这里是正文内容。\n\n- 列表项1\n- 列表项2\n\n**粗体** 和 *斜体* 测试。"
-    },
-    {
-      "title": "1111",
-      "slug": "1111",
-      "date": "2026-03-18",
-      "category": "1111",
-      "tags": [],
-      "excerpt": "1111..."
-    },
-    {
-      "slug": "hello-world",
-      "tags": [
-        "æµè¯"
-      ],
-      "date": "2026-03-19",
-      "category": "éç¬",
       "title": "Hello World",
-      "excerpt": "è¿æ¯ç¬¬ä¸ç¯æµè¯æç« "
+      "slug": "hello-world",
+      "date": "2026-03-19",
+      "category": "随笔",
+      "tags": ["测试"],
+      "excerpt": "这是第一篇测试文章，欢迎来到我的博客！"
     }
   ]
 }
